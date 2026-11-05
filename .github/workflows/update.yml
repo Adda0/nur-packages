@@ -9,13 +9,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Bumped by hand: rimstack tracks a fork branch, telescope stamps a release build number and commit.
-        include:
-          - package: atuin-desktop
-          - package: pinepods
-          - package: pinepods-firewood
-          - package: workshop-walker
-            args: --subpackage ui
+        # Bumped by hand: rimstack tracks a fork branch, telescope stamps a release build number and commit,
+        # atuin-desktop has a per-system node_modules hash nix-update does not refresh.
+        package: [pinepods, pinepods-firewood, workshop-walker]
     steps:
       - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v31
@@ -24,7 +20,7 @@ jobs:
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
       - name: nix-update
         run: |
-          nix develop --command nix-update --flake ${{ matrix.args }} ${{ matrix.package }}
+          nix develop --command just update ${{ matrix.package }}
           git diff --quiet || echo "UPDATED=1" >> "$GITHUB_ENV"
       # A PAT/App token, not GITHUB_TOKEN: pushes made with GITHUB_TOKEN do not trigger the Build workflow.
       - uses: peter-evans/create-pull-request@v7
