@@ -1,0 +1,31 @@
+name: Build
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      # The same evaluation NUR runs (ci/nur/eval.py), against nixos-unstable.
+      - name: NUR evaluation check
+        run: |
+          nix-env -f . -qa \* --meta --xml \
+            --allowed-uris https://static.rust-lang.org \
+            --option restrict-eval true \
+            --option allow-import-from-derivation true \
+            --drv-path --show-trace \
+            -I "nixpkgs=$(nix-instantiate --find-file nixpkgs)" \
+            -I "$PWD" > /dev/null
+      - name: Flake check (formatting, builds)
+        run: nix flake check --print-build-logs
+      - name: Trigger NUR update
+        if: github.event_name == 'push'
+        run: curl --fail --request POST "https://nur-update.nix-community.org/update?repo=adda"

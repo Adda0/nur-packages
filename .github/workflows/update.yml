@@ -1,0 +1,37 @@
+name: Update packages
+on:
+  schedule:
+    - cron: "37 3 * * 1"
+  workflow_dispatch:
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Bumped by hand: rimstack tracks a fork branch, telescope stamps a release build number and commit.
+        include:
+          - package: atuin-desktop
+          - package: pinepods
+          - package: pinepods-firewood
+          - package: workshop-walker
+            args: --subpackage ui
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: nix-update
+        run: |
+          nix develop --command nix-update --flake ${{ matrix.args }} ${{ matrix.package }}
+          git diff --quiet || echo "UPDATED=1" >> "$GITHUB_ENV"
+      # A PAT/App token, not GITHUB_TOKEN: pushes made with GITHUB_TOKEN do not trigger the Build workflow.
+      - uses: peter-evans/create-pull-request@v7
+        if: env.UPDATED == '1'
+        with:
+          token: ${{ secrets.UPDATE_TOKEN }}
+          branch: update/${{ matrix.package }}
+          commit-message: "${{ matrix.package }}: +chore Update to latest release"
+          title: "${{ matrix.package }}: +chore Update to latest release"
+          delete-branch: true
