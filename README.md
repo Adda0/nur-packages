@@ -1,19 +1,26 @@
+<!--
+DO-NOT-EDIT. This file was auto-generated using github:sini/files.
+Use `nix run .#generate-files` to regenerate it.
+-->
+
 # nur-packages
 
 Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`).
 
-| Package | Description |
-| --- | --- |
-| `atuin-desktop` | Local-first, executable runbook editor |
-| `pinepods` | Desktop client for PinePods |
-| `pinepods-firewood` | Terminal client for PinePods |
-| `rimstack` | Fast RimWorld mod manager (fork branch `Adda0/RimStack` `ideas-tip`) |
-| `telescope` | Use an Android phone's cameras as a webcam |
-| `workshop-walker` | Alternate Steam Workshop browser |
+## Packages
+
+| Attribute | pname | Version | Description | Homepage |
+| --- | --- | --- | --- | --- |
+| [`atuin-desktop`](pkgs/atuin-desktop/package.nix) | atuin-desktop | 0.2.20 | Local-first, executable runbook editor | <https://atuin.sh> |
+| [`pinepods`](pkgs/pinepods/package.nix) | pinepods | 0.9.0 | Desktop client for PinePods, a self-hosted podcast server | <https://www.pinepods.online/> |
+| [`pinepods-firewood`](pkgs/pinepods-firewood/package.nix) | pinepods-firewood | 0.1.0 | Terminal client for PinePods, a self-hosted podcast sync server | <https://github.com/madeofpendletonwool/pinepods-firewood> |
+| [`rimstack`](pkgs/rimstack/package.nix) | rimstack | 1.1.0-unstable-2026-10-31 | Fast RimWorld mod manager | <https://github.com/TheForgotten69/RimStack> |
+| [`telescope`](pkgs/telescope/package.nix) | telescope | 5.0.1 | Use an Android phone's cameras as a webcam | <https://github.com/LunarKittyy/Telescope> |
+| [`workshop-walker`](pkgs/workshop-walker/package.nix) | workshop-walker | 0.8.2 | Alternate Steam Workshop browser with dependants, language detection and properties | <https://github.com/disconsented/workshop-walker> |
 
 ## Usage
 
-Via NUR: `pkgs.nur.repos.adda.<package>`.
+Via NUR: `pkgs.nur.repos.adda.<attribute>`.
 
 As a flake input:
 
@@ -24,16 +31,24 @@ inputs.nur-packages = {
 };
 ```
 
-then `inputs.nur-packages.packages.x86_64-linux.<package>` or `nixpkgs.overlays = [ inputs.nur-packages.overlays.default ];`.
+then `inputs.nur-packages.packages.x86_64-linux.<attribute>`, or
+`nixpkgs.overlays = [ inputs.nur-packages.overlays.default ];`.
 
 ## Development
 
-`default.nix` is the source of truth NUR imports with its own `pkgs`; it must not use flake inputs or builtin fetchers.
-`flake.nix` (flake-parts) wraps it.
+`default.nix` is the entry point NUR imports with its own `pkgs`; it and `pkgs/` must not use flake
+inputs or builtin fetchers. The flake (`modules/`, flake-parts via `import-tree`) wraps it.
 
-- `nix develop`: shell with `nix-update`, `nixd`, `jq`.
-- `nix fmt`: format.
-- `nix flake check`: formatting and building every package.
-- `nix-update --flake <package>`: bump a package. CI does this weekly and opens PRs; it needs an `UPDATE_TOKEN`
-  secret (a PAT or GitHub App token with `contents` and `pull-requests` write), since PRs opened with `GITHUB_TOKEN`
-  do not trigger the build workflow.
+Recipes run via [`just`](https://github.com/casey/just) (Nushell); `just` lists them, trailing flags
+are forwarded.
+
+- `nix develop`: shell with `just`, `nushell`, `nix-update`, `nixfmt`, `nixd`, `jq`.
+- `just fmt`: format.
+- `just check`: formatting, generated files up to date, and building every package.
+- `just generate`: regenerate `README.md` and `flake.nix` (from `modules/`).
+- `just build <attribute>`: build one package.
+- `just update <attribute>`: bump one package with `nix-update`, adding the per-package flags it needs.
+  CI runs it weekly for `pinepods`, `pinepods-firewood` and `workshop-walker` and opens PRs; it needs
+  an `UPDATE_TOKEN` secret (a PAT or GitHub App token with `contents` and `pull-requests` write),
+  since PRs opened with `GITHUB_TOKEN` do not trigger the build workflow. The rest are bumped by hand.
+- `just flake-update [input…]`: update flake inputs.
