@@ -28,14 +28,33 @@ build PACKAGE *ARGS:
   nix build .#{{PACKAGE}} {{ARGS}}
 
 alias u := update
-# Bump one package to its latest release, e.g. `just update pinepods`; trailing flags go to nix-update.
+# Bump packages to their latest release: one (`just update pinepods`) or, with no name, all of them.
+# Trailing flags go to nix-update.
 [script("nu")]
-update PACKAGE *ARGS:
+update PACKAGE="" *ARGS:
   # Flags a package always needs: hashes nix-update would otherwise leave stale.
   let extra = {
     workshop-walker: [--subpackage ui]
-  } | get --optional {{PACKAGE}} | default []
-  nix develop --command nix-update --flake {{PACKAGE}} ...$extra {{ARGS}}
+    # Fork branch, untagged: nix-update names it `0-unstable-<date>`.
+    rimstack: [--version=branch=ideas-tip]
+  }
+  let packages = if "{{PACKAGE}}" != "" { ["{{PACKAGE}}"] } else {
+    let system = nix eval --raw --impure --expr builtins.currentSystem
+    nix eval --json $".#legacyPackages.($system)" --apply 'ps: builtins.filter (n: (ps.${n}.type or null) == "derivation") (builtins.attrNames ps)'
+      | from json
+  }
+  mut failed = []
+  for package in $packages {
+    print $"=== ($package)"
+    let ok = try {
+      nix develop --command nix-update --flake $package ...($extra | get --optional $package | default []) {{ARGS}}
+      true
+    } catch { false }
+    if not $ok { $failed = $failed | append $package }
+  }
+  if ($failed | is-not-empty) {
+    error make { msg: $"Failed to update: ($failed | str join ', ')" }
+  }
 
 alias fu := flake-update
 # Update flake inputs (all, or the ones named).
