@@ -29,13 +29,15 @@ build PACKAGE *ARGS:
 
 alias u := update
 # Bump one package to its latest release, e.g. `just update pinepods`; trailing flags go to nix-update.
+[script("nu")]
 update PACKAGE *ARGS:
-  let extra = {{extra-update-args}} | get --optional {{PACKAGE}} | default []; nix develop --command nix-update --flake {{PACKAGE}} ...$extra {{ARGS}}
+  # Flags a package always needs: hashes nix-update would otherwise leave stale.
+  let extra = {
+    workshop-walker: [--subpackage ui]
+  } | get --optional {{PACKAGE}} | default []
+  nix develop --command nix-update --flake {{PACKAGE}} ...$extra {{ARGS}}
 
 alias fu := flake-update
 # Update flake inputs (all, or the ones named).
 flake-update *ARGS:
   nix flake update {{ARGS}}
-
-# Flags `update` always passes for a package: hashes nix-update would otherwise leave stale.
-extra-update-args := "{ workshop-walker: [--subpackage ui] }"
