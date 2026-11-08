@@ -3,6 +3,9 @@ on:
   pull_request:
   push:
     branches: [main]
+  schedule:
+    # Weekly probe of the moving nixos-unstable tree used by the NUR evaluation.
+    - cron: "37 4 * * 1"
   workflow_dispatch:
 jobs:
   build:
@@ -25,6 +28,8 @@ jobs:
             -I "nixpkgs=$(nix-instantiate --find-file nixpkgs)" \
             -I "$PWD" > /dev/null
       - name: Flake check (formatting, builds)
+        # Locked flake.nix: scheduled runs only probe moving NUR nixpkgs.
+        if: github.event_name != 'schedule'
         run: nix flake check --print-build-logs
       - name: Trigger NUR update
         if: github.event_name == 'push'
