@@ -1,6 +1,6 @@
 <!--
 DO-NOT-EDIT. This file was auto-generated using github:sini/files.
-Use `nix run .#generate-files` to regenerate it.
+Use `just generate` to regenerate it.
 -->
 
 # nur-packages
@@ -9,15 +9,58 @@ Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`)
 
 ## Packages
 
-| Attribute | pname | Version | Description | Homepage |
-| --- | --- | --- | --- | --- |
-| [`atuin-desktop`](pkgs/atuin-desktop/package.nix) | atuin-desktop | 0.2.20 | Local-first, executable runbook editor | <https://atuin.sh> |
-| [`pinepods`](pkgs/pinepods/package.nix) | pinepods | 0.9.0 | Desktop client for PinePods, a self-hosted podcast server | <https://www.pinepods.online/> |
-| [`pinepods-firewood`](pkgs/pinepods-firewood/package.nix) | pinepods-firewood | 0.1.0 | Terminal client for PinePods, a self-hosted podcast sync server | <https://github.com/madeofpendletonwool/pinepods-firewood> |
-| [`rimstack`](pkgs/rimstack/package.nix) | rimstack | 0-unstable-2026-10-31 | Fast RimWorld mod manager | <https://github.com/TheForgotten69/RimStack> |
-| [`telescope`](pkgs/telescope/package.nix) | telescope | 5.0.1 | Use an Android phone's cameras as a webcam | <https://github.com/LunarKittyy/Telescope> |
-| [`workshop-walker`](pkgs/workshop-walker/package.nix) | workshop-walker | 0.8.2 | Alternate Steam Workshop browser with dependants, language detection and properties | <https://github.com/disconsented/workshop-walker> |
-| [`zonetimeline-tui`](pkgs/zonetimeline-tui/package.nix) | zonetimeline-tui | 0.4.1 | A terminal tool for visually comparing time zones — built for distributed teams | <https://github.com/findyourexit/zonetimeline-tui> |
+- **`atuin-desktop`**
+  - version: 0.2.20
+  - description: Local-first, executable runbook editor
+  - homepage: <https://atuin.sh>
+  - license: Apache-2.0
+  - maintainers: adda0, dzervas, randoneering
+  - main program: `atuin-desktop`
+  - source: [pkgs/atuin-desktop/package.nix](pkgs/atuin-desktop/package.nix)
+- **`pinepods`**
+  - version: 0.9.2
+  - description: Desktop client for PinePods, a self-hosted podcast server
+  - homepage: <https://www.pinepods.online/>
+  - license: GPL-3.0-only
+  - maintainers: adda0
+  - main program: `pinepods`
+  - source: [pkgs/pinepods/package.nix](pkgs/pinepods/package.nix)
+- **`pinepods-firewood`**
+  - version: 0.2.0
+  - description: Terminal client for PinePods, a self-hosted podcast sync server
+  - homepage: <https://github.com/madeofpendletonwool/pinepods-firewood>
+  - license: GPL-3.0-only
+  - main program: `pinepods_firewood`
+  - source: [pkgs/pinepods-firewood/package.nix](pkgs/pinepods-firewood/package.nix)
+- **`rimstack`**
+  - version: 0-unstable-2026-11-07
+  - description: Fast RimWorld mod manager
+  - homepage: <https://github.com/TheForgotten69/RimStack>
+  - license: GPL-3.0-or-later
+  - main program: `rimstack`
+  - source: [pkgs/rimstack/package.nix](pkgs/rimstack/package.nix)
+- **`telescope`**
+  - version: 5.0.5
+  - description: Use an Android phone's cameras as a webcam
+  - homepage: <https://github.com/LunarKittyy/Telescope>
+  - license: AGPL-3.0-only
+  - main program: `telescope`
+  - source: [pkgs/telescope/package.nix](pkgs/telescope/package.nix)
+- **`workshop-walker`**
+  - version: 0.8.2
+  - description: Alternate Steam Workshop browser with dependants, language detection and properties
+  - homepage: <https://github.com/disconsented/workshop-walker>
+  - license: MPL-2.0
+  - main program: `workshop-walker`
+  - source: [pkgs/workshop-walker/package.nix](pkgs/workshop-walker/package.nix)
+- **`zonetimeline-tui`**
+  - version: 0.4.1
+  - description: A terminal tool for visually comparing time zones — built for distributed teams
+  - homepage: <https://github.com/findyourexit/zonetimeline-tui>
+  - license: MIT
+  - maintainers: adda0
+  - main program: `ztl`
+  - source: [pkgs/zonetimeline-tui/package.nix](pkgs/zonetimeline-tui/package.nix)
 
 ## Usage
 

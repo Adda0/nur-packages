@@ -11,13 +11,29 @@
       ...
     }:
     let
-      escape = lib.replaceStrings [ "|" ] [ "\\|" ];
-      # Rows straight from each package's pname and meta, so the table cannot drift from the packages.
-      row =
+      maintainersOf =
+        meta: lib.concatMapStringsSep ", " (m: m.github or m.name) (meta.maintainers or [ ]);
+      # Values straight from each package's meta, so the list cannot drift from the packages.
+      fields =
+        pkg:
+        let
+          inherit (pkg) meta;
+        in
+        [ "version: ${pkg.version}" ]
+        ++ lib.optional (meta ? description) "description: ${meta.description}"
+        ++ lib.optional (meta ? homepage) "homepage: <${meta.homepage}>"
+        ++
+          lib.optional (meta ? license)
+            "license: ${meta.license.spdxId or (meta.license.shortName or "unknown")}"
+        ++ lib.optional (meta ? maintainers && meta.maintainers != [ ]) "maintainers: ${maintainersOf meta}"
+        ++ lib.optional (meta ? mainProgram) "main program: `${meta.mainProgram}`";
+      entry =
         attr: pkg:
-        "| [`${attr}`](pkgs/${attr}/package.nix) | ${pkg.pname} | ${pkg.version} | ${
-          escape (pkg.meta.description or "")
-        } | ${lib.optionalString (pkg.meta ? homepage) "<${pkg.meta.homepage}>"} |";
+        lib.concatStringsSep "\n" (
+          [ "- **`${attr}`**" ]
+          ++ map (field: "  - ${field}") (fields pkg)
+          ++ [ "  - source: [pkgs/${attr}/package.nix](pkgs/${attr}/package.nix)" ]
+        );
     in
     {
       files = {
@@ -34,10 +50,8 @@
 
           ## Packages
 
-          | Attribute | pname | Version | Description | Homepage |
-          | --- | --- | --- | --- | --- |
           ${lib.concatStringsSep "\n" (
-            lib.mapAttrsToList row (lib.filterAttrs (_: lib.isDerivation) config.legacyPackages)
+            lib.mapAttrsToList entry (lib.filterAttrs (_: lib.isDerivation) config.legacyPackages)
           )}
 
           ## Usage
