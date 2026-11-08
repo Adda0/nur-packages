@@ -11,7 +11,7 @@ jobs:
       matrix:
         # Bumped by hand: telescope stamps a release build number and commit, atuin-desktop has a per-system
         # node_modules hash nix-update does not refresh.
-        package: [pinepods, pinepods-firewood, rimstack, workshop-walker]
+        package: [pinepods, pinepods-firewood, rimstack, workshop-walker, zonetimeline-tui]
     steps:
       - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v31

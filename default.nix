@@ -15,4 +15,5 @@
     # stdarch ("intrinsic signature mismatch" in `diskann-vector`). The upstream binaries bundle their own LLVM.
     rustPlatform = pkgs.makeRustPlatform { inherit (pkgs.rust.packages.prebuilt) cargo rustc; };
   };
+  zonetimeline-tui = pkgs.callPackage ./pkgs/zonetimeline-tui/package.nix { };
 }

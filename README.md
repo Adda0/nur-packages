@@ -17,6 +17,7 @@ Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`)
 | [`rimstack`](pkgs/rimstack/package.nix) | rimstack | 0-unstable-2026-10-31 | Fast RimWorld mod manager | <https://github.com/TheForgotten69/RimStack> |
 | [`telescope`](pkgs/telescope/package.nix) | telescope | 5.0.1 | Use an Android phone's cameras as a webcam | <https://github.com/LunarKittyy/Telescope> |
 | [`workshop-walker`](pkgs/workshop-walker/package.nix) | workshop-walker | 0.8.2 | Alternate Steam Workshop browser with dependants, language detection and properties | <https://github.com/disconsented/workshop-walker> |
+| [`zonetimeline-tui`](pkgs/zonetimeline-tui/package.nix) | zonetimeline-tui | 0.4.1 | A terminal tool for visually comparing time zones — built for distributed teams | <https://github.com/findyourexit/zonetimeline-tui> |
 
 ## Usage
 
@@ -50,7 +51,7 @@ are forwarded.
 - `just build <attribute>`: build one package.
 - `just update [attribute]`: bump one package, or every package when none is named, with `nix-update`
   and the per-package flags it needs; failures are listed at the end. CI runs it weekly for
-  `pinepods`, `pinepods-firewood`, `rimstack` and `workshop-walker` and opens PRs; it needs an
+  `pinepods`, `pinepods-firewood`, `rimstack`, `workshop-walker` and `zonetimeline-tui` and opens PRs; it needs an
   `UPDATE_TOKEN` secret (a PAT or GitHub App token with `contents` and `pull-requests` write), since
   PRs opened with `GITHUB_TOKEN` do not trigger the build workflow. `atuin-desktop` and `telescope`
   need manual hash/stamp fixes after an update.

@@ -72,7 +72,7 @@
           - `just build <attribute>`: build one package.
           - `just update [attribute]`: bump one package, or every package when none is named, with `nix-update`
             and the per-package flags it needs; failures are listed at the end. CI runs it weekly for
-            `pinepods`, `pinepods-firewood`, `rimstack` and `workshop-walker` and opens PRs; it needs an
+            `pinepods`, `pinepods-firewood`, `rimstack`, `workshop-walker` and `zonetimeline-tui` and opens PRs; it needs an
             `UPDATE_TOKEN` secret (a PAT or GitHub App token with `contents` and `pull-requests` write), since
             PRs opened with `GITHUB_TOKEN` do not trigger the build workflow. `atuin-desktop` and `telescope`
             need manual hash/stamp fixes after an update.
