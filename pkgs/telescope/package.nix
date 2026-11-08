@@ -62,9 +62,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # A release stamp: the "dev" default keeps settings in a throwaway profile. Build number from the release's manifest.json.
   env = {
-    TELESCOPE_BUILD = "2595";
+    TELESCOPE_BUILD = "2648";
     TELESCOPE_CHANNEL = "stable";
-    TELESCOPE_COMMIT = "f0d8ea937032700e4f09f5e3981cdd414cc8596b";
+    TELESCOPE_COMMIT = "e02e2a8e5f04c99238e137e4095ec16e672eb886";
   };
 
   nativeBuildInputs = [
