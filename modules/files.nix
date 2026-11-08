@@ -91,7 +91,8 @@
             `zonetimeline-tui` and opens PRs; it needs an `UPDATE_TOKEN` secret (a PAT or GitHub App token with
             `contents` and `pull-requests` write), since PRs opened with `GITHUB_TOKEN` do not trigger the build
             workflow. `atuin-desktop` and `telescope` need manual hash/stamp fixes after an update.
-          - `just flake-update [input…]`: update flake inputs.
+          - `just flake-update [input…]`: update flake inputs manually. Dependabot also opens weekly PRs
+            for `flake.lock` and GitHub Actions.
         '';
       };
 
