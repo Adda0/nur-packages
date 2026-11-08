@@ -28,8 +28,8 @@ build PACKAGE *ARGS:
   nix build .#{{PACKAGE}} {{ARGS}}
 
 alias u := update
-# Bump packages to their latest release: one (`just update pinepods`) or, with no name, all of them.
-# Trailing flags go to nix-update.
+# Bump packages to their latest release, one commit per package as `<name>: <old> -> <new>`: one
+# (`just update pinepods`) or, with no name, all of them. Trailing flags go to nix-update.
 [script("nu")]
 update PACKAGE="" *ARGS:
   # Flags a package always needs: hashes nix-update would otherwise leave stale.
@@ -43,14 +43,27 @@ update PACKAGE="" *ARGS:
     nix eval --json $".#legacyPackages.($system)" --apply 'ps: builtins.filter (n: (ps.${n}.type or null) == "derivation") (builtins.attrNames ps)'
       | from json
   }
+  # Commit through jj in a jj checkout, plain git otherwise (CI runs a git clone).
+  let jj = (".jj" | path exists)
   mut failed = []
   for package in $packages {
     print $"=== ($package)"
+    let path = $"pkgs/($package)"
+    # nix-update's own commit message, written only when it actually changed something.
+    let message_file = (mktemp --suffix .txt)
     let ok = try {
-      nix develop --command nix-update --flake $package ...($extra | get --optional $package | default []) {{ARGS}}
+      nix develop --command nix-update --flake --use-update-script --write-commit-message $message_file $package ...($extra | get --optional $package | default []) {{ARGS}}
       true
     } catch { false }
-    if not $ok { $failed = $failed | append $package }
+    let message = if ($message_file | path exists) { open --raw $message_file | str trim } else { "" }
+    rm --force $message_file
+    if not $ok { $failed = $failed | append $package } else if ($message | is-not-empty) {
+      if $jj { jj commit --message $message $path } else {
+        git add --all -- $path
+        git commit --message $message -- $path
+      }
+      print $message
+    }
   }
   if ($failed | is-not-empty) {
     error make { msg: $"Failed to update: ($failed | str join ', ')" }

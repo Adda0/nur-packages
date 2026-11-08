@@ -20,14 +20,20 @@ jobs:
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
       - name: nix-update
         run: |
+          # The update recipe commits what it bumps; give it an author.
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          before=$(git rev-parse HEAD)
           nix develop --command just update ${{ matrix.package }}
-          git diff --quiet || echo "UPDATED=1" >> "$GITHUB_ENV"
+          if [ "$(git rev-parse HEAD)" != "$before" ]; then
+            echo "UPDATED=1" >> "$GITHUB_ENV"
+            echo "TITLE=$(git log -1 --format=%s)" >> "$GITHUB_ENV"
+          fi
       # A PAT/App token, not GITHUB_TOKEN: pushes made with GITHUB_TOKEN do not trigger the Build workflow.
       - uses: peter-evans/create-pull-request@v7
         if: env.UPDATED == '1'
         with:
           token: ${{ secrets.UPDATE_TOKEN }}
           branch: update/${{ matrix.package }}
-          commit-message: "${{ matrix.package }}: +chore Update to latest release"
-          title: "${{ matrix.package }}: +chore Update to latest release"
+          title: ${{ env.TITLE }}
           delete-branch: true

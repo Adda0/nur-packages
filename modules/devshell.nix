@@ -12,8 +12,10 @@
 
       devShells.default = pkgs.mkShellNoCC {
         packages = with pkgs; [
+          git
           jq
           just
+          jujutsu
           nushell
           nix-update
           nixd

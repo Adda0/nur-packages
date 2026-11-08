@@ -44,15 +44,16 @@ Recipes run via [`just`](https://github.com/casey/just) (Nushell); `just` lists 
 are forwarded.
 
 - `nix develop` (or direnv, via the generated `.envrc`): shell with `just`, `nushell`, `nix-update`,
-  `nixfmt`, `nixd`, `jq`.
+  `nixfmt`, `nixd`, `jq`, `git` and `jj`.
 - `just fmt`: format.
 - `just check`: formatting, generated files up to date, and building every package.
 - `just generate`: regenerate `README.md`, `.envrc` and `flake.nix` (from `modules/`).
 - `just build <attribute>`: build one package.
 - `just update [attribute]`: bump one package, or every package when none is named, with `nix-update`
-  and the per-package flags it needs; failures are listed at the end. CI runs it weekly for
-  `pinepods`, `pinepods-firewood`, `rimstack`, `workshop-walker` and `zonetimeline-tui` and opens PRs; it needs an
-  `UPDATE_TOKEN` secret (a PAT or GitHub App token with `contents` and `pull-requests` write), since
-  PRs opened with `GITHUB_TOKEN` do not trigger the build workflow. `atuin-desktop` and `telescope`
-  need manual hash/stamp fixes after an update.
+  and the per-package flags it needs; every changed package becomes its own commit,
+  `<name>: <old> -> <new>` (through `jj` in a jj checkout, `git` otherwise), and failures are listed at
+  the end. CI runs it weekly for `pinepods`, `pinepods-firewood`, `rimstack`, `workshop-walker` and
+  `zonetimeline-tui` and opens PRs; it needs an `UPDATE_TOKEN` secret (a PAT or GitHub App token with
+  `contents` and `pull-requests` write), since PRs opened with `GITHUB_TOKEN` do not trigger the build
+  workflow. `atuin-desktop` and `telescope` need manual hash/stamp fixes after an update.
 - `just flake-update [input…]`: update flake inputs.
