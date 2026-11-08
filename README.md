@@ -9,6 +9,13 @@ Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`)
 
 ## Packages
 
+- **`ai-memory`**
+  - version: 3.4.4
+  - description: Long-term memory for AI coding agents
+  - homepage: <https://aimemory.sh>
+  - license: MIT
+  - main program: `ai-memory`
+  - source: [pkgs/ai-memory/package.nix](pkgs/ai-memory/package.nix)
 - **`atuin-desktop`**
   - version: 0.2.20
   - description: Local-first, executable runbook editor
