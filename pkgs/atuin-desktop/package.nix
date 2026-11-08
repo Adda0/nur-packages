@@ -160,11 +160,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     downloadPage = "https://github.com/atuinsh/desktop";
     changelog = "https://github.com/atuinsh/desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      adda
-      dzervas
-      randoneering
-    ];
+    maintainers = with lib.maintainers; [ adda ];
     mainProgram = "atuin-desktop";
     platforms = with lib.platforms; windows ++ darwin ++ linux;
   };

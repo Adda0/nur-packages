@@ -11,8 +11,18 @@
       ...
     }:
     let
+      # nixpkgs maintainer attribute (`adda`), which is how maintainers are named there, with the
+      # GitHub handle linked behind it; the real name is irrelevant in a package list.
+      maintainerKeys = lib.attrNames lib.maintainers;
       maintainersOf =
-        meta: lib.concatMapStringsSep ", " (m: m.github or m.name) (meta.maintainers or [ ]);
+        meta:
+        lib.concatMapStringsSep ", " (
+          m:
+          let
+            key = lib.findFirst (k: lib.maintainers.${k} == m) (m.github or m.name or "unknown") maintainerKeys;
+          in
+          "`${key}`" + lib.optionalString (m ? github) " ([@${m.github}](https://github.com/${m.github}))"
+        ) (meta.maintainers or [ ]);
       # Values straight from each package's meta, so the list cannot drift from the packages.
       fields =
         pkg:

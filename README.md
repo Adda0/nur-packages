@@ -14,7 +14,7 @@ Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`)
   - description: Local-first, executable runbook editor
   - homepage: <https://atuin.sh>
   - license: Apache-2.0
-  - maintainers: adda0, dzervas, randoneering
+  - maintainers: `adda` ([@adda0](https://github.com/adda0))
   - main program: `atuin-desktop`
   - source: [pkgs/atuin-desktop/package.nix](pkgs/atuin-desktop/package.nix)
 - **`pinepods`**
@@ -22,7 +22,7 @@ Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`)
   - description: Desktop client for PinePods, a self-hosted podcast server
   - homepage: <https://www.pinepods.online/>
   - license: GPL-3.0-only
-  - maintainers: adda0
+  - maintainers: `adda` ([@adda0](https://github.com/adda0))
   - main program: `pinepods`
   - source: [pkgs/pinepods/package.nix](pkgs/pinepods/package.nix)
 - **`pinepods-firewood`**
@@ -58,7 +58,7 @@ Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`)
   - description: A terminal tool for visually comparing time zones — built for distributed teams
   - homepage: <https://github.com/findyourexit/zonetimeline-tui>
   - license: MIT
-  - maintainers: adda0
+  - maintainers: `adda` ([@adda0](https://github.com/adda0))
   - main program: `ztl`
   - source: [pkgs/zonetimeline-tui/package.nix](pkgs/zonetimeline-tui/package.nix)
 
