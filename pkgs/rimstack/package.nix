@@ -26,7 +26,7 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "rimstack";
-  version = "0-unstable-2026-11-07";
+  version = "1.1.0-unstable-2026-11-07";
 
   # Fork branch `ideas-tip`; upstream is TheForgotten69/RimStack.
   src = fetchFromGitHub {

@@ -49,12 +49,22 @@ update PACKAGE="" *ARGS:
   for package in $packages {
     print $"=== ($package)"
     let path = $"pkgs/($package)"
+    let package_file = $"($path)/package.nix"
+    let old_digest = if $package == "rimstack" { open --raw $package_file | hash sha256 } else { "" }
     # nix-update's own commit message, written only when it actually changed something.
     let message_file = (mktemp --suffix .txt)
     let ok = try {
       nix develop --command nix-update --flake --use-update-script --write-commit-message $message_file $package ...($extra | get --optional $package | default []) {{ARGS}}
       true
     } catch { false }
+    if $package == "rimstack" {
+      # No tags means nix-update supplies `0`; use the upstream Cargo workspace's base version instead.
+      open --raw $package_file | str replace --all 'version = "0-unstable-' 'version = "1.1.0-unstable-' | save --force $package_file
+      if ($message_file | path exists) {
+        open --raw $message_file | str replace --all "0-unstable-" "1.1.0-unstable-" | save --force $message_file
+        if (open --raw $package_file | hash sha256) == $old_digest { rm --force $message_file }
+      }
+    }
     let message = if ($message_file | path exists) { open --raw $message_file | str trim } else { "" }
     rm --force $message_file
     if not $ok { $failed = $failed | append $package } else if ($message | is-not-empty) {

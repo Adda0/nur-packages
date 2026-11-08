@@ -40,7 +40,7 @@ Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`)
   - main program: `pinepods_firewood`
   - source: [pkgs/pinepods-firewood/package.nix](pkgs/pinepods-firewood/package.nix)
 - **`rimstack`**
-  - version: 0-unstable-2026-11-07
+  - version: 1.1.0-unstable-2026-11-07
   - description: Fast RimWorld mod manager
   - homepage: <https://github.com/TheForgotten69/RimStack>
   - license: GPL-3.0-or-later
