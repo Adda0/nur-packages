@@ -34,8 +34,10 @@ alias u := update
 update PACKAGE="" *ARGS:
   # Flags a package always needs: hashes nix-update would otherwise leave stale.
   let extra = {
+    # Separate frontend and Tauri Cargo.lock files need separate vendor hashes.
+    pinepods: [--subpackage frontendCargoDeps.vendorStaging --override-filename pkgs/pinepods/package.nix]
     workshop-walker: [--subpackage ui]
-    # Fork branch, untagged: nix-update names it `0-unstable-<date>`.
+    # Fork branch, untagged: nix-update names it `0-unstable-<date>`; normalize it below.
     rimstack: [--version=branch=ideas-tip]
   }
   let packages = if "{{PACKAGE}}" != "" { ["{{PACKAGE}}"] } else {

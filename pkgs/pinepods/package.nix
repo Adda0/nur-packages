@@ -1,6 +1,8 @@
 {
   binaryen,
+  buildWasmBindgenCli,
   cargo-tauri,
+  fetchCrate,
   fetchFromGitHub,
   glib-networking,
   lib,
@@ -12,11 +14,26 @@
   rustc,
   tailwindcss_3,
   trunk,
-  wasm-bindgen-cli_0_2_125,
   webkitgtk_4_1,
   wrapGAppsHook3,
 }:
 
+let
+  # PinePods 0.9.2 locks wasm-bindgen 0.2.130; nixpkgs currently provides 0.2.129.
+  wasm-bindgen-cli = buildWasmBindgenCli rec {
+    src = fetchCrate {
+      pname = "wasm-bindgen-cli";
+      version = "0.2.130";
+      hash = "sha256-9Og1O/6/VC3sc5hBjoIWBErmLW2UHGMsTQO+6+m/dng=";
+    };
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit src;
+      inherit (src) pname version;
+      hash = "sha256-j81sUf1m5yXU4FJfGj7GV+hdqVCV8mRmNb0QIsMCjqw=";
+    };
+  };
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pinepods";
   version = "0.9.2";
@@ -37,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname src version;
     name = "pinepods-frontend-vendor";
     cargoRoot = "web";
-    hash = "sha256-wYWnPwQw7wbxIIJAbHwvKgPMIwWbOik6qCidtmfMhBA=";
+    hash = "sha256-8dsJ5r2ersAI5Qpx3veYjCtOixFo6iLoxsykkGudejk=";
   };
 
   postPatch = ''
@@ -61,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapGAppsHook3
 
     trunk
-    wasm-bindgen-cli_0_2_125
+    wasm-bindgen-cli
     binaryen
     tailwindcss_3
     rustc.llvmPackages.lld
