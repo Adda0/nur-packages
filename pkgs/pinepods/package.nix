@@ -16,6 +16,7 @@
   trunk,
   webkitgtk_4_1,
   wrapGAppsHook3,
+  zstd,
 }:
 
 let
@@ -77,7 +78,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     wrapGAppsHook3
 
-    trunk
+    (trunk.overrideAttrs (old: {
+      buildInputs = (old.buildInputs or [ ]) ++ [ zstd ];
+    }))
     wasm-bindgen-cli
     binaryen
     tailwindcss_3

@@ -1,5 +1,6 @@
 {
   alsa-lib,
+  aws-lc,
   cacert,
   fetchFromGitHub,
   lib,
@@ -25,9 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     rustPlatform.bindgenHook
   ];
+  # nixpkgs' cargo setup hook requires system AWS-LC for aws-lc-sys.
   buildInputs = [
-    openssl
     alsa-lib
+    aws-lc
+    openssl
   ];
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
