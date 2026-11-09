@@ -1,5 +1,6 @@
 {
   alsa-lib,
+  cacert,
   fetchFromGitHub,
   lib,
   openssl,
@@ -20,11 +21,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-W7dB4rhSnco+V+yqIgBJMynstIsxRFbOVd7el8T5/oM=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
   buildInputs = [
     openssl
     alsa-lib
   ];
+
+  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   meta = {
     description = "Terminal client for PinePods, a self-hosted podcast sync server";
