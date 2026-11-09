@@ -105,8 +105,10 @@ are forwarded.
   `nixfmt`, `nixd`, `jq`, `git` and `jj`.
 - `just fmt`: format.
 - `just check`: formatting, generated files up to date, and building every package.
-- `just generate`: regenerate `README.md`, `.envrc` and `flake.nix` (from `modules/`).
-- `just build <attribute>`: build one package.
+- `just generate`: regenerate `README.md`, `.envrc`, `flake.nix` and
+  `.github/workflows/build.yml` (from `modules/`).
+- `just build <attribute>`: build one package. The Build workflow does the same per package, as a
+  matrix of jobs generated from the flake's packages, so no single long build serializes the rest.
 - `just update [attribute]`: bump one package, or every package when none is named, with `nix-update`
   and the per-package flags it needs; every changed package becomes its own commit,
   `<name>: <old> -> <new>` (through `jj` in a jj checkout, `git` otherwise), and failures are listed at

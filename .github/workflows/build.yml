@@ -1,3 +1,4 @@
+# DO-NOT-EDIT. This file was auto-generated. Use `just generate` to regenerate it.
 name: Build
 on:
   pull_request:
@@ -7,8 +8,9 @@ on:
     # Weekly probe of the moving nixos-unstable tree used by the NUR evaluation.
     - cron: "37 4 * * 1"
   workflow_dispatch:
+
 jobs:
-  build:
+  eval:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -27,10 +29,59 @@ jobs:
             --drv-path --show-trace \
             -I "nixpkgs=$(nix-instantiate --find-file nixpkgs)" \
             -I "$PWD" > /dev/null
-      - name: Flake check (formatting, builds)
-        # Locked flake.nix: scheduled runs only probe moving NUR nixpkgs.
-        if: github.event_name != 'schedule'
-        run: nix flake check --print-build-logs
+
+  # The checks that are not per-package builds: formatting, the generated-file freshness
+  # checks, and the flake-files consistency check.
+  static:
+    needs: eval
+    # Locked flake.nix: scheduled runs only probe moving NUR nixpkgs.
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Formatting and generated files
+        run: |
+          nix build --print-build-logs '.#checks.x86_64-linux."files/.envrc"' \
+            '.#checks.x86_64-linux."files/README.md"' \
+            '.#checks.x86_64-linux."files/.github/workflows/build.yml"' \
+            '.#checks.x86_64-linux."treefmt"' \
+            '.#checks.x86_64-linux."check-flake-file"'
+
+  build:
+    needs: eval
+    # Locked flake.nix: scheduled runs only probe moving NUR nixpkgs.
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - ai-memory
+          - atuin-desktop
+          - pinepods
+          - pinepods-firewood
+          - rimstack
+          - rmrfrs
+          - telescope
+          - workshop-walker
+          - zonetimeline-tui
+    steps:
+      - uses: actions/checkout@v7
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Build
+        run: nix build --print-build-logs --no-link '.#checks.x86_64-linux.${{ matrix.package }}'
+
+  nur-update:
+    needs: [static, build]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
       - name: Trigger NUR update
-        if: github.event_name == 'push'
         run: curl --fail --request POST "https://nur-update.nix-community.org/update?repo=adda"
