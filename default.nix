@@ -9,6 +9,7 @@
   pinepods = pkgs.callPackage ./pkgs/pinepods/package.nix { };
   pinepods-firewood = pkgs.callPackage ./pkgs/pinepods-firewood/package.nix { };
   rimstack = pkgs.callPackage ./pkgs/rimstack/package.nix { };
+  rmrfrs = pkgs.callPackage ./pkgs/rmrfrs/package.nix { };
   telescope = pkgs.callPackage ./pkgs/telescope/package.nix { };
   workshop-walker = pkgs.callPackage ./pkgs/workshop-walker/package.nix {
     # nixpkgs' source-built rustc 1.98 links LLVM 21, whose AVX-512 VNNI intrinsic signatures mismatch its

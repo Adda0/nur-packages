@@ -39,6 +39,14 @@ Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`)
   - license: GPL-3.0-or-later
   - main program: `rimstack`
   - source: [pkgs/rimstack/package.nix](pkgs/rimstack/package.nix)
+- **`rmrfrs`**
+  - version: 0.8.8
+  - description: Powerful filesystem cleaning tool designed to optimize storage by identifying and removing unnecessary files within known project structures
+  - homepage: <https://github.com/trinhminhtriet/rmrfrs>
+  - license: MIT
+  - maintainers: `adda` ([@adda0](https://github.com/adda0))
+  - main program: `rmrfrs`
+  - source: [pkgs/rmrfrs/package.nix](pkgs/rmrfrs/package.nix)
 - **`telescope`**
   - version: 5.0.5
   - description: Use an Android phone's cameras as a webcam
@@ -95,7 +103,7 @@ are forwarded.
 - `just update [attribute]`: bump one package, or every package when none is named, with `nix-update`
   and the per-package flags it needs; every changed package becomes its own commit,
   `<name>: <old> -> <new>` (through `jj` in a jj checkout, `git` otherwise), and failures are listed at
-  the end. CI runs it weekly for `pinepods`, `pinepods-firewood`, `rimstack`, `workshop-walker` and
+  the end. CI runs it weekly for `pinepods`, `pinepods-firewood`, `rimstack`, `rmrfrs`, `workshop-walker` and
   `zonetimeline-tui` and opens PRs; it needs an `UPDATE_TOKEN` secret (a PAT or GitHub App token with
   `contents` and `pull-requests` write), since PRs opened with `GITHUB_TOKEN` do not trigger the build
   workflow. `atuin-desktop` and `telescope` need manual hash/stamp fixes after an update.
