@@ -2,7 +2,11 @@
   fetchFromGitHub,
   fetchpatch,
   lib,
+  oniguruma,
+  pkg-config,
   rustPlatform,
+  libgit2,
+  sqlite,
 }:
 let
   # gemm 0.19.0 dispatches to its AVX2 kernels wherever the CPU merely reports `fma`, then panics in
@@ -27,6 +31,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-zackdEqEDnd6Cmwnu2cHxp2uGRPRMFMo3xms5k+Z66Q=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libgit2
+    sqlite
+    oniguruma
+  ];
 
   # The crate sources sit under source-registry-0/<crate>-<version>/ in the vendored deps, while the
   # upstream patch carries the repository layout.
