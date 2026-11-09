@@ -11,6 +11,7 @@
       ...
     }:
     let
+      managedPackages = lib.filterAttrs (_: lib.isDerivation) config.legacyPackages;
       # nixpkgs maintainer attribute (`adda`), which is how maintainers are named there, with the
       # GitHub handle linked behind it; the real name is irrelevant in a package list.
       maintainerKeys = lib.attrNames lib.maintainers;
@@ -58,11 +59,9 @@
 
           Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`).
 
-          ## Packages
+          ## Packages (${toString (builtins.length (builtins.attrNames managedPackages))})
 
-          ${lib.concatStringsSep "\n" (
-            lib.mapAttrsToList entry (lib.filterAttrs (_: lib.isDerivation) config.legacyPackages)
-          )}
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList entry managedPackages)}
 
           ## Usage
 

@@ -7,7 +7,7 @@ Use `just generate` to regenerate it.
 
 Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`).
 
-## Packages
+## Packages (9)
 
 - **`ai-memory`**
   - version: 3.4.4
