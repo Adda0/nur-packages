@@ -13,7 +13,7 @@ jobs:
         # node_modules hash nix-update does not refresh.
         package: [pinepods, pinepods-firewood, rimstack, rmrfrs, workshop-walker, zonetimeline-tui]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
         with:
           extra_nix_config: |
