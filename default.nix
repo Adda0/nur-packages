@@ -7,6 +7,7 @@
 
   ai-memory = pkgs.callPackage ./pkgs/ai-memory/package.nix { };
   atuin-desktop = pkgs.callPackage ./pkgs/atuin-desktop/package.nix { };
+  jjfx = pkgs.callPackage ./pkgs/jjfx/package.nix { };
   pinepods = pkgs.callPackage ./pkgs/pinepods/package.nix { };
   pinepods-firewood = pkgs.callPackage ./pkgs/pinepods-firewood/package.nix { };
   rimstack = pkgs.callPackage ./pkgs/rimstack/package.nix { };

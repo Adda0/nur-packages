@@ -7,7 +7,7 @@ Use `just generate` to regenerate it.
 
 Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`).
 
-## Packages (9)
+## Packages (10)
 
 - **`ai-memory`**
   - version: 3.4.4
@@ -24,6 +24,14 @@ Adda's [NUR](https://github.com/nix-community/NUR) repository (`nur.repos.adda`)
   - maintainers: `adda` ([@adda0](https://github.com/adda0))
   - main program: `atuin-desktop`
   - source: [pkgs/atuin-desktop/package.nix](pkgs/atuin-desktop/package.nix)
+- **`jjfx`**
+  - version: 0.56.0
+  - description: A terminal UI for working with Jujutsu (jj) workspaces and the coding agents editing them
+  - homepage: <https://github.com/Jarvvski/jjfx>
+  - license: GPL-3.0-or-later
+  - maintainers: `adda` ([@adda0](https://github.com/adda0))
+  - main program: `jjfx`
+  - source: [pkgs/jjfx/package.nix](pkgs/jjfx/package.nix)
 - **`pinepods`**
   - version: 0.9.2
   - description: Desktop client for PinePods, a self-hosted podcast server
@@ -112,9 +120,10 @@ are forwarded.
 - `just update [attribute]`: bump one package, or every package when none is named, with `nix-update`
   and the per-package flags it needs; every changed package becomes its own commit,
   `<name>: <old> -> <new>` (through `jj` in a jj checkout, `git` otherwise), and failures are listed at
-  the end. CI runs it weekly for `pinepods`, `pinepods-firewood`, `rimstack`, `rmrfrs`, `workshop-walker` and
-  `zonetimeline-tui` and opens PRs; it needs an `UPDATE_TOKEN` secret (a PAT or GitHub App token with
-  `contents` and `pull-requests` write), since PRs opened with `GITHUB_TOKEN` do not trigger the build
+  the end. CI runs it weekly for `jjfx`, `pinepods`, `pinepods-firewood`, `rimstack`,
+  `rmrfrs`, `workshop-walker` and `zonetimeline-tui` and opens PRs; it needs an
+  `UPDATE_TOKEN` secret (a PAT or GitHub App token with `contents` and
+  `pull-requests` write), since PRs opened with `GITHUB_TOKEN` do not trigger the build
   workflow. `atuin-desktop` and `telescope` need manual hash/stamp fixes after an update.
 - `just flake-update [input…]`: update flake inputs manually. Dependabot also opens weekly PRs
   for `flake.lock` and GitHub Actions.
