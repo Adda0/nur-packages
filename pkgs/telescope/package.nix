@@ -1,6 +1,7 @@
 {
   alsa-lib,
   android-tools,
+  aws-lc,
   copyDesktopItems,
   fetchFromGitHub,
   ffmpeg_8,
@@ -75,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     alsa-lib
     ffmpeg_8
     fontconfig
