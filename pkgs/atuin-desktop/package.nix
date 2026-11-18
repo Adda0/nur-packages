@@ -8,9 +8,11 @@
   libappindicator,
   nix-update-script,
   nodejs,
+  oniguruma,
   openssl,
   pkg-config,
   rustPlatform,
+  sqlite,
   stdenv,
   webkitgtk_4_1,
   wrapGAppsHook4,
@@ -94,7 +96,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  # nixpkgs' cargo setup hook makes libsqlite3-sys and onig_sys link the system libraries.
+  buildInputs = [
+    oniguruma
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     glib-networking
     libappindicator
