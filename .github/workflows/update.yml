@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@v7
       - uses: cachix/install-nix-action@v31
         with:
+          # nix-update evaluates passthru.updateScript via `import <nixpkgs>`.
+          nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-unstable.tar.gz
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
       - name: nix-update
