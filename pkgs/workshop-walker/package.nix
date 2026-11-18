@@ -1,13 +1,17 @@
 {
   autoPatchelfHook,
+  aws-lc,
   buildNpmPackage,
   coreutils,
   fetchFromGitHub,
   lib,
   makeWrapper,
   nodejs_26,
+  pkg-config,
+  rust-jemalloc-sys,
   rustPlatform,
   stdenv,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,8 +41,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # The binary links libstdc++ (RocksDB) without an rpath to it.
     autoPatchelfHook
     makeWrapper
+    pkg-config
   ];
-  buildInputs = [ stdenv.cc.cc.lib ];
+  # nixpkgs' cargo setup hook makes aws-lc-sys, tikv-jemalloc-sys and zstd-sys link the system
+  # libraries.
+  buildInputs = [
+    aws-lc
+    rust-jemalloc-sys
+    stdenv.cc.cc.lib
+    zstd
+  ];
 
   cargoBuildFlags = [
     "--bin"
