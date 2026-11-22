@@ -17,7 +17,15 @@
           just
           jujutsu
           nushell
-          nix-update
+          # Nix 2.35 no longer copies the flake on `nix flake metadata`; drop after nix-update > 1.16.0.
+          (nix-update.overridePythonAttrs (old: {
+            patches = (old.patches or [ ]) ++ [
+              (fetchpatch {
+                url = "https://github.com/Mic92/nix-update/commit/dcef4fdd7edbd9ef83c701e5d92a3df81fbd0e33.patch";
+                hash = "sha256-uNOfiYbLAm/0Ret2nUQ3Wxd1IoOsclRbF11z2gGx0vM=";
+              })
+            ];
+          }))
           nixd
           nixfmt
         ];
