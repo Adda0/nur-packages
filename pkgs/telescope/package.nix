@@ -39,19 +39,19 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "telescope";
-  version = "5.0.5";
+  version = "5.1.4";
 
   src = fetchFromGitHub {
     owner = "LunarKittyy";
     repo = "Telescope";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UZVkh5ff/9QHjieHxUO58iQIpP+46ZP1KAQIRNXf3mo=";
+    hash = "sha256-Pl08jeF8B+/07YjXvuvQMN/aUeJbg6zghF1wozemr4E=";
   };
 
   cargoRoot = "rust";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-YlZeLaz2R1fXXOEKpKA5aWs72NV+j8PVKQtJNBcGla8=";
+  cargoHash = "sha256-Yf8QTi05UQBKftYj58y2HvDh1LaelkjEEUWzTOhEbps=";
 
   # Menu and sign-in entries the app writes into ~/.local and ~/.config name its own executable, a store path that
   # garbage collection removes; point them at the wrapper on PATH instead.
