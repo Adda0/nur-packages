@@ -63,7 +63,8 @@ update PACKAGE="" *ARGS:
       # No tags means nix-update supplies `0`; use the upstream Cargo workspace's base version instead.
       open --raw $package_file | str replace --all 'version = "0-unstable-' 'version = "1.1.0-unstable-' | save --force $package_file
       if ($message_file | path exists) {
-        open --raw $message_file | str replace --all "0-unstable-" "1.1.0-unstable-" | save --force $message_file
+        # Only the new version: the old one already reads `1.1.0-unstable-`, which also contains `0-unstable-`.
+        open --raw $message_file | str replace --all "-> 0-unstable-" "-> 1.1.0-unstable-" | save --force $message_file
         if (open --raw $package_file | hash sha256) == $old_digest { rm --force $message_file }
       }
     }
