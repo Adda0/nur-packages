@@ -1,29 +1,21 @@
 {
   fetchFromGitHub,
+  fontconfig,
+  freetype,
   git,
   lib,
-  qt6,
+  libGL,
+  libx11,
+  libxcb,
+  libxext,
+  libxkbcommon,
+  makeWrapper,
+  pkg-config,
   rustPlatform,
-  symlinkJoin,
-  writeShellScript,
-  writeText,
+  sqlite,
+  vulkan-loader,
+  wayland,
 }:
-let
-  # cxx-qt-build reads every module's .prl from the single QT_INSTALL_LIBS qmake reports, but nixpkgs splits Qt into one
-  # prefix per module; hand it a qmake that reports a merged prefix.
-  qtPrefix = symlinkJoin {
-    name = "rimstack-qt-prefix";
-    paths = [
-      qt6.qtbase
-      qt6.qtdeclarative
-    ];
-  };
-  qtConf = writeText "qt.conf" ''
-    [Paths]
-    Prefix=${qtPrefix}
-  '';
-  qmake = writeShellScript "qmake" ''exec ${lib.getExe' qt6.qtbase "qmake"} -qtconf ${qtConf} "$@"'';
-in
 rustPlatform.buildRustPackage {
   pname = "rimstack";
   version = "1.1.0-unstable-2026-11-17";
@@ -38,17 +30,24 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-L8Hf4UxgrmdgorvEmKUahV3ifg+wdrUsCNuVdVMirj8=";
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
-
-  buildInputs = [
-    qt6.qtbase
-    qt6.qtdeclarative
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
   ];
 
-  # After the qtbase setup hook, which exports its own QMAKE.
-  preBuild = ''
-    export QMAKE=${qmake}
-  '';
+  # What gpui-fast links against on Linux; mirrors upstream's nix/gpui-libs.nix.
+  buildInputs = [
+    fontconfig
+    freetype
+    libGL
+    libx11
+    libxcb
+    libxext
+    libxkbcommon
+    # rusqlite via zed-font-kit links the system SQLite (not the bundled copy).
+    sqlite
+    wayland
+  ];
 
   # Upstream's default branch declares a rust-version newer than nixpkgs' rustc.
   cargoBuildFlags = [
@@ -69,14 +68,22 @@ rustPlatform.buildRustPackage {
     "--skip=sources::maintenance::tests::a_game_started_now_is_seen_running_and_not_once_it_ended"
   ];
 
-  qtWrapperArgs = [
-    # Git-sourced mods need Git for cloning and updating.
-    "--prefix PATH : ${lib.makeBinPath [ git ]}"
-  ];
-
   postInstall = ''
     install -Dm644 crates/app/assets/rimstack.desktop -t $out/share/applications
     install -Dm644 crates/app/assets/rimstack.svg -t $out/share/icons/hicolor/scalable/apps
+  '';
+
+  # gpui-fast dlopens Vulkan, GL and Wayland at run time; Git-sourced mods need Git for cloning and updating.
+  postFixup = ''
+    wrapProgram $out/bin/rimstack \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libGL
+          vulkan-loader
+          wayland
+        ]
+      } \
+      --prefix PATH : ${lib.makeBinPath [ git ]}
   '';
 
   meta = {
