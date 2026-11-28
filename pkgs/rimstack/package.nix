@@ -26,17 +26,17 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "rimstack";
-  version = "1.1.0-unstable-2026-11-07";
+  version = "1.1.0-unstable-2026-11-17";
 
   # Fork branch `ideas-tip`; upstream is TheForgotten69/RimStack.
   src = fetchFromGitHub {
     owner = "Adda0";
     repo = "RimStack";
-    rev = "b1f9f3a6a59a0dfafd097e65550d37c85c088fa8";
-    hash = "sha256-ePJqsE/A2M2pytpQ3b78INCGRobltvlSEMzJb+LwDLI=";
+    rev = "1b624898d2b52cb044a9b624b3031bd7cdaac95b";
+    hash = "sha256-5NLP3tLGBMTAEJoiMbG5T/opvDaoCGwFS1T30N5qZ9A=";
   };
 
-  cargoHash = "sha256-2rF1AgUA/jQyowJ1ryR+tcM7k0gkb85bJaZ8j5lNquc=";
+  cargoHash = "sha256-L8Hf4UxgrmdgorvEmKUahV3ifg+wdrUsCNuVdVMirj8=";
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
